@@ -1,4 +1,5 @@
 import 'package:brew_sanket/models/user.dart';
+import 'package:brew_sanket/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -44,6 +45,10 @@ class AuthService {
       UserCredential result = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       User user = result.user!;
+
+// make a document for the user with uid
+      await DatabaseService(uid: user.uid)
+          .updateUserdata('0', 'new member', 100);
       return _userFromFirebase(user);
     } catch (e) {
       print(e.toString());
