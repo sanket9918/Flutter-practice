@@ -7,6 +7,7 @@ class DioClient {
   static const baseUrl = "https://api.chucknorris.io/jokes";
   static const categoryBaseUrl =
       "https://api.chucknorris.io/jokes/random?category=";
+  static const searchUrl = "https://api.chucknorris.io/jokes/search?query=";
   static const randomJokesUri = "/random";
   static const categories = "/categories";
 
@@ -35,6 +36,18 @@ class DioClient {
     try {
       final response = await dio.get(categoryBaseUrl + category);
       return Joke.fromJson(response.data);
+    } on DioError catch (e) {
+      debugPrint("Status code: ${e.response?.statusCode.toString()}");
+      throw Exception("Failed to get joke :((");
+    }
+  }
+
+  Future<List<Joke>> fetchSearchResults(String searchText) async {
+    try {
+      final response = await dio.get(searchUrl + searchText);
+      debugPrint("${response.data['result']}");
+      Iterable list = response.data['result'];
+      return list.map((e) => Joke.fromJson(e)).toList();
     } on DioError catch (e) {
       debugPrint("Status code: ${e.response?.statusCode.toString()}");
       throw Exception("Failed to get joke :((");

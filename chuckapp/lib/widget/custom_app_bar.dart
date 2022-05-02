@@ -1,3 +1,4 @@
+import 'package:chuckapp/screen/search_page.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -12,13 +13,22 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         margin: const EdgeInsets.only(top: 10),
         padding: const EdgeInsets.symmetric(horizontal: 15),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text("Chuck Joke",
                 style: Theme.of(context)
                     .textTheme
                     .headline1!
-                    .copyWith(fontSize: 18, fontWeight: FontWeight.bold))
+                    .copyWith(fontSize: 18, fontWeight: FontWeight.bold)),
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(builder: ((context) {
+                  return SearchPage();
+                })));
+              },
+            )
           ],
         ),
       ),

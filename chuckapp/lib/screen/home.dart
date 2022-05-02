@@ -33,10 +33,7 @@ class _HomePageState extends State<HomePage> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
           child: Column(
-            children: [
-              Header(),
-              Categories()
-            ],
+            children: [Header(), Categories()],
           ),
         ),
       ),
