@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
                   TextStyle(color: const Color(0xFF100E34).withOpacity(0.5))),
         ),
         home: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.background,
           body: HomePage(),
         ));
   }

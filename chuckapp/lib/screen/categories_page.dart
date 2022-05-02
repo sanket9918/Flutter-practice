@@ -27,56 +27,110 @@ class _SpecificCategoryJokeState extends State<SpecificCategoryJoke> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(),
+      appBar: const CustomAppBar(),
       body: FutureBuilder<Joke>(
         future: joke,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return Container(
               color: Theme.of(context).colorScheme.background,
-              padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
               child: SafeArea(
                 child: Column(
                   children: [
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
-                    Text(
-                      "Category : ${widget.category}",
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1!
-                          .copyWith(fontSize: 18, fontWeight: FontWeight.bold),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Category",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline1!
+                                  .copyWith(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.normal),
+                            ),
+                            Text(
+                              widget.category,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(
+                                      fontSize: 32,
+                                      fontWeight: FontWeight.bold,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary,
+                                          letterSpacing: 2),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                            onPressed: () {
+                              joke =
+                                  dioClient.fetchCategoryJoke(widget.category);
+                              setState(() {
+                                loading = true;
+                              });
+                            },
+                            icon: Icon(
+                              Icons.refresh,
+                              color: Theme.of(context).colorScheme.primary,
+                            ))
+                      ],
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 30,
                     ),
-                    Text(
-                      snapshot.data!.value,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18),
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 10),
+                          decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(10),                              
+                              border: Border.all(width: 1)),
+                      child: Text(
+                        snapshot.data!.value,
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                            ),
+                      ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       height: 20,
                     ),
                     IconButton(
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: Colors.black,
+                        icon: Container(
+                          width: 60,
+                          height: 60,
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              shape: BoxShape.circle,
+                              border: Border.all(width: 1)),
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
                         ))
                   ],
                 ),
               ),
             );
           } else if (snapshot.hasError) {
-            return Text("No chuck for now :(");
+            return const Text("No chuck for now :(");
           }
-          return Center(
+          return const Center(
               child: CircularProgressIndicator(
             color: Colors.deepOrange,
           ));

@@ -59,9 +59,9 @@ class _HeaderState extends State<Header> {
             FutureBuilder<Joke>(
               future: joke,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.hasData) {                  
                   return Padding(
-                    padding: EdgeInsets.all(20),
+                    padding: const EdgeInsets.all(20),
                     child: Column(
                       children: [
                         Text(
@@ -78,9 +78,9 @@ class _HeaderState extends State<Header> {
                     ),
                   );
                 } else if (snapshot.hasError) {
-                  return Text("No chuck for now :(");
+                  return const Text("No chuck for now :(");
                 }
-                return Center(
+                return const Center(
                     child: CircularProgressIndicator(
                   color: Colors.deepOrange,
                 ));

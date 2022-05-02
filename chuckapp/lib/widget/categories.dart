@@ -25,7 +25,7 @@ class _CategoriesState extends State<Categories> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         Text(
@@ -43,58 +43,55 @@ class _CategoriesState extends State<Categories> {
                 return Center(
                     child: Padding(
                   padding: EdgeInsets.all(20),
-                  child: Container(
-                    height: MediaQuery.of(context).size.height,
-                    child: GridView.builder(
-                        scrollDirection: Axis.vertical,
-                        gridDelegate:
-                            const SliverGridDelegateWithFixedCrossAxisCount(
-                                childAspectRatio: 1,
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 4.0,
-                                mainAxisSpacing: 4.0),
-                        itemBuilder: (context, index) => GestureDetector(
-                            onTap: () {
-                              debugPrint("${snapshot.data![index]}");
-                              Navigator.of(context)
-                                  .push(MaterialPageRoute(builder: (context) {
-                                return SpecificCategoryJoke(
-                                    category: snapshot.data![index] as String);
-                              }));
-                            },
-                            child: Card(
+                  child: GridView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                              childAspectRatio: 1,
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 4.0,
+                              mainAxisSpacing: 4.0),
+                      itemBuilder: (context, index) => GestureDetector(
+                          onTap: () {
+                            debugPrint("${snapshot.data![index]}");
+                            Navigator.of(context)
+                                .push(MaterialPageRoute(builder: (context) {
+                              return SpecificCategoryJoke(
+                                  category: snapshot.data![index] as String);
+                            }));
+                          },
+                          child: Card(
 
-                                // style: ButtonStyle(elevation: MaterialStateProperty.all(0) ,backgroundColor:  MaterialStateProperty.all(Colors.grey),padding:MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 3,vertical: 2)),textStyle: MaterialStateProperty.all(TextStyle(color: Colors.black))),
-                                child: Container(
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color:
-                                      Theme.of(context).colorScheme.secondary),
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    snapshot.data![index],
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .copyWith(
-                                            color: Colors.white,
-                                            fontSize: 18,
-                                            fontWeight: FontWeight.bold),
-                                  )
-                                ],
-                              ),
-                            ))),
-                        // separatorBuilder: (_, index) => SizedBox(height: 10),
-                        itemCount: snapshot.data!.length),
-                  ),
+                              // style: ButtonStyle(elevation: MaterialStateProperty.all(0) ,backgroundColor:  MaterialStateProperty.all(Colors.grey),padding:MaterialStateProperty.all(EdgeInsets.symmetric(horizontal: 3,vertical: 2)),textStyle: MaterialStateProperty.all(TextStyle(color: Colors.black))),
+                              child: Container(
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Theme.of(context).colorScheme.secondary),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  snapshot.data![index],
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(
+                                          color: Colors.white,
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
+                                )
+                              ],
+                            ),
+                          ))),
+                      // separatorBuilder: (_, index) => SizedBox(height: 10),
+                      itemCount: snapshot.data!.length),
                 ));
               } else if (snapshot.hasError) {
-                return Text("Couldn't fetch data at the moment");
+                return const Text("Couldn't fetch data at the moment");
               }
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
+              return const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Center(
                     child: CircularProgressIndicator(
                   color: Colors.deepOrange,
