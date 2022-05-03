@@ -33,101 +33,94 @@ class _SearchPageState extends State<SearchPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: TextField(
-                    controller: textInputController,
-                    decoration: InputDecoration(
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderSide: BorderSide.none,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        hintText: "Search...",
-                        prefixIcon: Container(
-                            padding: const EdgeInsets.all(15),
-                            child: const Icon(Icons.search)),
-                        contentPadding: const EdgeInsets.all(2)),
-                  ),
+      body: Column(
+        children: [
+          Row(
+            children: [
+              Expanded(
+                flex: 3,
+                child: TextField(
+                  controller: textInputController,
+                  decoration: InputDecoration(
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderSide: BorderSide.none,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      hintText: "Search...",
+                      prefixIcon: Container(
+                          padding: const EdgeInsets.all(15),
+                          child: const Icon(Icons.search)),
+                      contentPadding: const EdgeInsets.all(2)),
                 ),
-                IconButton(
-                  onPressed: () {
-                    jokes =
-                        dioClient.fetchSearchResults(textInputController.text);
-                    setState(() {
-                      searchInitiate = true;
-                    });
-                  },
-                  icon: const Icon(Icons.search),
-                  color: Theme.of(context).colorScheme.primary,
-                )
-              ],
-            ),
-            if (searchInitiate)
-              FutureBuilder<List<Joke>>(
-                  future: jokes,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      debugPrint("${snapshot.data!.length}");
-                      return SingleChildScrollView(
-                        physics: const ScrollPhysics(),
-                        child: ListView.builder(
-                            scrollDirection: Axis.vertical,
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemCount: snapshot.data!.length,
-                            itemBuilder: (context, index) => Column(
-                                  children: [
-                                    const SizedBox(
-                                      height: 10,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 20, vertical: 15),
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 12, vertical: 10),
-                                        decoration: BoxDecoration(
-                                            color: Colors.transparent,
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                            border: Border.all(width: 1)),
-                                        child: Text(
-                                          snapshot.data![index].value,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .copyWith(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18,
-                                              ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                )),
-                      );
-                    } else if (snapshot.hasError) {
-                      return const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Text("No chuck for now :("),
-                      );
-                    }
-                    return const Center(
-                        child: CircularProgressIndicator(
-                      color: Colors.deepOrange,
-                    ));
-                  })
-          ],
-        ),
+              ),
+              IconButton(
+                onPressed: () {
+                  jokes =
+                      dioClient.fetchSearchResults(textInputController.text);
+                  setState(() {
+                    searchInitiate = true;
+                  });
+                },
+                icon: const Icon(Icons.search),
+                color: Theme.of(context).colorScheme.primary,
+              )
+            ],
+          ),
+          if (searchInitiate)
+            FutureBuilder<List<Joke>>(
+                future: jokes,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    debugPrint("${snapshot.data!.length}");
+                    return Expanded(child: listPainter(snapshot));
+                  } else if (snapshot.hasError) {
+                    return const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Text("No chuck for now :("),
+                    );
+                  }
+                  return const Center(
+                      child: CircularProgressIndicator(
+                    color: Colors.deepOrange,
+                  ));
+                })
+        ],
       ),
     );
+  }
+
+  ListView listPainter(AsyncSnapshot<List<Joke>> snapshot) {
+    return ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: snapshot.data!.length,
+        itemBuilder: (context, index) => Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 12, vertical: 10),
+                    decoration: BoxDecoration(
+                        color: Colors.transparent,
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(width: 1)),
+                    child: Text(
+                      snapshot.data![index].value,
+                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                    ),
+                  ),
+                ),
+              ],
+            ));
   }
 }
